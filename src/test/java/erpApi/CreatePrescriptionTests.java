@@ -16,9 +16,9 @@ import static junit.framework.Assert.assertEquals;
 
 public class CreatePrescriptionTests {
 
-    DataBaseConnect dataBaseConnect;
+    private DataBaseConnect dataBaseConnect;
     private PrescriptionClient prescriptionClient;
-    Prescription prescription;
+    private Prescription prescription;
     private PrescriptionData testDataForPrescription;
     ValidatableResponse createResponse;
     private int createStatusCode;

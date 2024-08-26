@@ -85,9 +85,6 @@ public class Prescription {
     // Периодичность отпуска
     private String dispencePeriod;
 
-    //* Идентификатор схемы лечения (ТАП)
-    //private UUID schemeUid;
-
     // СНИЛС представителя пациента
     // Осуществляется проверка контрольной суммы СНИЛС.
     // СНИЛС должен состоять из 11 цифр и не содержать спецсимволы.
@@ -105,7 +102,7 @@ public class Prescription {
 
     // Дата проведения врачебной комиссии
     // Формат: yyyy-MM-ddTHH:mm:sszzz
-    private LocalDateTime commissionDate;
+    private String commissionDate;
 
     // Номер врачебной комиссии
     private String commissionNumber;
@@ -115,7 +112,7 @@ public class Prescription {
 
     // Адрес доставки
     // Модель AddressDto
-    private List<AddressDto> deliveryAddress;
+    private AddressDto deliveryAddress;
 
     // Список данных о заказах на доставку
     // private String deliveries;
@@ -140,7 +137,7 @@ public class Prescription {
     private String medicalCardNumber;
 
     // Идентификатор заявки на продление.
-    private UUID renewalUid;
+    private String renewalUid;
 
     // Код льготы. Справочник ФНСИ 1.2.643.5.1.13.13.99.2.541 поле "Код".
     private String privilegeCode;
@@ -150,22 +147,5 @@ public class Prescription {
 
     // Подпись председателя врачебной комиссии в формате открепленной CMS
     private String chairmanSignature;
-
-    // Статус рецепта/назначения
-    // 0 - Registered (Зарегистрирован)
-    // 1 - Dispensed (Отпущен)
-    // 2 - PartiallyDispensed (Частично отпущен)
-    // 3 - Canceled (Отменен)
-    // 4 - DelayedService (Отложенное обслуживание)
-    // 5 - Аnnulmented (Аннулирован)
-    //private Enum state;
-
-    // Подписанный рецепт СЭМД
-    // Модель Semd
-    //private List<Semd> semdData;
-
-    // Данные об отмене рецепта
-    // Модель Cancel
-    //private List<Cancel> cancel;
 
 }

@@ -11,7 +11,6 @@ import io.qameta.allure.SeverityLevel;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
-
 import static junit.framework.Assert.assertEquals;
 
 public class CreatePrescriptionTests {

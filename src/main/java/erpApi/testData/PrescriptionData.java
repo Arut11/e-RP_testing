@@ -49,4 +49,13 @@ public class PrescriptionData {
 
     }
 
+    public Cancel getCancelPrescriptionTestData(String uid) {
+        return new Cancel()
+                .setUid(uid)
+                .setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+                .setAuthor(new AuthorData().getAuthor())
+                .setReasonString("Запуск автотестов");
+
+    }
+
 }

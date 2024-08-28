@@ -8,7 +8,7 @@ public class DataBaseConnect {
         private static final String DB_USER = "sa";
         private static final String DB_PASSWORD = "sagfhjkzYES!";
 
-    DatabaseHelper databaseHelper = new DatabaseHelper();
+        private DatabaseHelper databaseHelper;
 
     public int executeUpdate(String query) {
         int affectedRows = 0;

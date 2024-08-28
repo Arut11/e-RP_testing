@@ -1,19 +1,26 @@
 package dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
+import lombok.experimental.Accessors;
+
 
 // Данные об отмене рецепта.
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Cancel {
 
     //* Дата отмены рецепта
     // Используем LocalDate для даты в формате yyyy-MM-dd
-    private LocalDate date;
+    private String uid;
+
+    //* Дата отмены рецепта
+    private String date;
 
     //* Данные об авторе
     // Модель Author
@@ -21,15 +28,5 @@ public class Cancel {
 
     // Причина отмены рецепта
     private String reasonString; // Строка для причины отмены
-
-    // Код причины отмены рецепта
-    // Справочник ФНСИ. OID: 1.2.643.5.1.13.13.99.2.654 поле "Уникальный идентификатор"
-    private String reasonCode;
-
-    // Организация отменившая/аннулировавшая рецепт
-    private String organizationName;
-
-    // Подразделение отменившее/аннулировавшее рецепт
-    private String subdivisionName;
 
 }

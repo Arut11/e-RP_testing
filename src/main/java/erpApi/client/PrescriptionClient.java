@@ -1,5 +1,6 @@
 package erpApi.client;
 
+import dto.Cancel;
 import dto.Prescription;
 import dto.PrescriptionV2;
 import io.qameta.allure.Step;
@@ -42,7 +43,26 @@ public class PrescriptionClient extends RestClient {
 
    }
 
-    @Step("Получение списка рецептов/назначений")
+    @Step("Отмена рецепта/назначения")
+    public ValidatableResponse cancelPrescription(Cancel cancel) {
+        String jsonCancel = gson.toJson(cancel);
+        String encodedData = Base64.getEncoder().encodeToString(jsonCancel.getBytes());
+        String doctorSignature = CryptoClient.getDoctorSignature(encodedData);
+        PrescriptionV2 prescriptionV2 = new PrescriptionV2()
+                .setData(encodedData)
+                .setDoctorSignature(doctorSignature);
+        String requestBody = gson.toJson(prescriptionV2);
+        return given()
+                .spec(getBaseSpec())
+                .body(requestBody)
+                .when()
+                .put(PRESCRIPTION_CANCEL_PATH)
+                .then();
+
+    }
+
+
+    @Step("Получить данные рецепта/назначения")
     public ValidatableResponse getPrescriptionByUid(String uid) {
         return given()
                 .spec(getBaseSpec())

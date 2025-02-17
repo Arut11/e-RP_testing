@@ -1,49 +1,53 @@
 package dataBase;
 
-import java.sql.*;
+import static configs.ConfigSingle.cfg;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DataBaseConnect {
 
-        private static final String DB_URL = "jdbc:postgresql://192.168.7.220:5432/erp_db_dev";
-        private static final String DB_USER = "sa";
-        private static final String DB_PASSWORD = "sagfhjkzYES!";
+  private DatabaseHelper databaseHelper;
 
-        private DatabaseHelper databaseHelper;
+  public int executeUpdate(String query) {
+    int affectedRows = 0;
+    try (Connection connection = databaseHelper.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query)) {
 
-    public int executeUpdate(String query) {
-        int affectedRows = 0;
-        try (Connection connection = databaseHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+      affectedRows = statement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return affectedRows;
+  }
 
-            affectedRows = statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+  public String getData(String query, String... columns) {
+    try (Connection connection = databaseHelper.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery()) {
+
+      if (resultSet.next()) {
+        if (columns.length == 1) {
+          return resultSet.getString(columns[0]);
+        } else {
         }
-        return affectedRows;
+      } else {
+        throw new RuntimeException("Не удалось получить данные из базы данных");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 
-    public String getData(String query, String... columns) {
-        try (Connection connection = databaseHelper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+  public DataBaseConnect() {
+    databaseHelper = new DatabaseHelper(
+        cfg.getDatabaseUrl(),
+        cfg.getDatabaseLogin(),
+        cfg.getDatabasePassword());
 
-            if (resultSet.next()) {
-                if (columns.length == 1) {
-                    return resultSet.getString(columns[0]);
-                } else {
-                }
-            } else {
-                throw new RuntimeException("Не удалось получить данные из базы данных");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public DataBaseConnect() {
-        databaseHelper = new DatabaseHelper(DB_URL, DB_USER, DB_PASSWORD);
-
-    }
+  }
 
 }

@@ -1,6 +1,7 @@
 package erpApiAdmin.testData;
 
 import com.github.javafaker.Faker;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -10,10 +11,10 @@ public class OrganizationData extends Organization {
 
   static Faker fakerRu = new Faker(Locale.forLanguageTag("ru"));
   Faker fakerUS = new Faker(Locale.US);
-  OkatoData OkatoData;
+  OkatoData okatoData;
 
-  public Organization getCreateOrganizationTestData() {
-    OkatoData = new OkatoData();
+  public Organization getCreateOrganizationTestData() throws SQLException {
+    okatoData = new OkatoData();
     return new Organization()
         .setId(super.getId())
         .setName(fakerRu.name().firstName())
@@ -26,7 +27,7 @@ public class OrganizationData extends Organization {
         .setLatitude(fakerRu.address().latitude())
         .setLongitude(fakerRu.address().longitude())
         .setWebsiteUrl(fakerRu.internet().url())
-        .setOkato(null)
+        .setOkato(okatoData.getAddOkato())
         .setDateBegin(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
         .setDateEnd(
             LocalDateTime.now().plusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));

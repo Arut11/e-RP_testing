@@ -1,15 +1,16 @@
 package dataBase;
 
-import static configs.ConfigSingle.cfg;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DataBaseConnect {
 
-  private DatabaseHelper databaseHelper;
+  private DatabaseHelper databaseHelper = new DatabaseHelper();
 
   public int executeUpdate(String query) {
     int affectedRows = 0;
@@ -23,31 +24,38 @@ public class DataBaseConnect {
     return affectedRows;
   }
 
-  public String getData(String query, String... columns) {
+  public String getSelectData(String query, String column) throws SQLException  {
+    String code = null;
     try (Connection connection = databaseHelper.getConnection();
-        PreparedStatement statement = connection.prepareStatement(query);
-        ResultSet resultSet = statement.executeQuery()) {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query)) {
 
       if (resultSet.next()) {
-        if (columns.length == 1) {
-          return resultSet.getString(columns[0]);
-        } else {
-        }
-      } else {
-        throw new RuntimeException("Не удалось получить данные из базы данных");
+        code = resultSet.getString(column);
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    return null;
+
+    return code;
   }
 
-  public DataBaseConnect() {
-    databaseHelper = new DatabaseHelper(
-        cfg.getDatabaseUrl(),
-        cfg.getDatabaseLogin(),
-        cfg.getDatabasePassword());
+  public Map<String, String> getSelectData(String query, String... columns) throws SQLException {
+    Map<String, String> result = new HashMap<>();
+    try (Connection connection = databaseHelper.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query)) {
 
+      if (resultSet.next()) {
+        for (String column : columns) {
+          result.put(column, resultSet.getString(column));
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return result;
   }
 
 }

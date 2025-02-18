@@ -2,7 +2,9 @@ package erpApiAdmin.testData;
 
 import com.github.javafaker.Faker;
 import dataBase.DataBaseConnect;
+import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Map;
 import models.Okato;
 
 public class OkatoData {
@@ -14,13 +16,14 @@ public class OkatoData {
     return faker.number().numberBetween(1, 5690);
   }
 
-  public Okato getAddOkato() {
-    String query = "SELECT code, name, comment, data_end FROM erp_okato WHERE id = " + generateId();
-    String code = dataBaseConnect.getData(query);
+  public Okato getAddOkato() throws SQLException {
+    int id = generateId();
+    String query = "SELECT * FROM erp_okato WHERE id = " + id;
+    Map<String, String> value = dataBaseConnect.getSelectData(query, "code", "name");
     return new Okato()
-        .setId(generateId())
-        .setCode(code);
+        .setId(id)
+        .setCode(value.get("code"))
+        .setName(value.get("name"));
   }
-
 
 }

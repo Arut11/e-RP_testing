@@ -15,7 +15,7 @@ public enum Prescription {
   PRESCRIPTION_UID_SIGNATURES_GET("/erp/erpApi/v2/prescription/{uid}/signatures"),
   PRESCRIPTION_POST("/erp/erpApi/v2/prescription"),
   PRESCRIPTION_SEMD_POST("/erp/erpApi/v2/prescription/{uid}/semd"),
-  PRESCRIPTION_CANCEL_POST("/erp/erpApi/v2/prescription/cancel");
+  PRESCRIPTION_CANCEL_PUT("/erp/erpApi/v2/prescription/cancel");
 
   private final String endpoint;
 

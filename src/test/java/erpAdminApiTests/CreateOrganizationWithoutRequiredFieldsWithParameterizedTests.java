@@ -1,5 +1,6 @@
 package erpAdminApiTests;
 
+import java.sql.SQLException;
 import models.Okato;
 import models.Organization;
 import erpApiAdmin.controllers.OrganizationController;
@@ -42,7 +43,7 @@ public class CreateOrganizationWithoutRequiredFieldsWithParameterizedTests {
     }
   }
 
-  public static Object[][] getOrganizationParameterizedTests() {
+  public static Object[][] getOrganizationParameterizedTests() throws SQLException {
     return CreateOrganizationWithoutRequiredFieldsWithParameterizedTestsData.getNegativeDataOrganizationTest();
   }
 
@@ -86,8 +87,8 @@ public class CreateOrganizationWithoutRequiredFieldsWithParameterizedTests {
     createResponse = organizationClient.createOrganization(organization);
     createStatusCode = createResponse.extract().statusCode();
     String responseError = createResponse.extract().path("message");
-    Assertions.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, createStatusCode,
-        "Статус код вернулся не 500 при создании организации без обязательных полей");
+    Assertions.assertEquals(HttpStatus.SC_BAD_REQUEST, createStatusCode,
+        "Статус код вернулся не 400 при создании организации без обязательных полей");
     Assertions.assertEquals("Поле " + getFields() + " не может быть пустым", responseError,
         "Сообщение об ошибке вернулось некорректное");
   }

@@ -38,7 +38,7 @@ public class Patient {
   // 0 - Male (Мужской)
   // 1 - Female (Женский)
   // 2 - Unknown (Неизвестно)
-  private int gender;
+  private Object gender;
 
   //* СНИЛС
   // Осуществляется проверка контрольной суммы СНИЛС.

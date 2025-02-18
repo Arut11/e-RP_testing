@@ -25,7 +25,7 @@ public interface ProjectConfig extends Config {
    */
 
   @Key("database.url")
-  @DefaultValue("jdbc:postgresql://192.168.7.220:5432/erp_db_dev")
+  @DefaultValue("jdbc:postgresql://192.168.7.220:5432/erp_db_test")
   String getDatabaseUrl();
 
   @Key("database.login")

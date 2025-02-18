@@ -1,5 +1,6 @@
 package erpAdminApiTests;
 
+import java.sql.SQLException;
 import models.Okato;
 import models.Organization;
 import erpApiAdmin.controllers.OrganizationController;
@@ -42,7 +43,7 @@ public class CreateOrganizationWithoutUsingAdditionalFieldsParameterizedTests {
   }
 
 
-  public static Object[][] getOrganizationParameterizedTests() {
+  public static Object[][] getOrganizationParameterizedTests() throws SQLException {
     return CreatingOrganizationWithoutUsingAdditionalFieldsCheckParametersData.getPositiveDataOrganizationTest();
   }
 

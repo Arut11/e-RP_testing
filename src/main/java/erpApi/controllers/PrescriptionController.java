@@ -1,6 +1,7 @@
 package erpApi.controllers;
 
-import static erpApi.endpoints.Prescription.PRESCRIPTION_CANCEL_POST;
+import static erpApi.endpoints.Prescription.PRESCRIPTION_CANCEL_PUT;
+import static erpApi.endpoints.Prescription.PRESCRIPTION_LIST_COUNT_GET;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_POST;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_UID_GET;
 import static io.restassured.RestAssured.given;
@@ -33,7 +34,6 @@ public class PrescriptionController extends Specifications {
         .when()
         .post(PRESCRIPTION_POST.getEndpoint())
         .then();
-
   }
 
   @Step("Отмена рецепта/назначения")
@@ -49,7 +49,7 @@ public class PrescriptionController extends Specifications {
         .spec(getBaseSpec())
         .body(requestBody)
         .when()
-        .put(PRESCRIPTION_CANCEL_POST.getEndpoint())
+        .put(PRESCRIPTION_CANCEL_PUT.getEndpoint())
         .then();
 
   }

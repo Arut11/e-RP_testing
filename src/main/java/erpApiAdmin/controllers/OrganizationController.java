@@ -21,7 +21,6 @@ public class OrganizationController extends Specifications {
     return given()
         .spec(getErpAdminBaseSpec())
         .body(organization)
-        .when()
         .post(ORGANIZATION_POST.getEndpoint())
         .then();
   }
@@ -32,7 +31,6 @@ public class OrganizationController extends Specifications {
     return given()
         .spec(getErpAdminBaseSpec())
         .pathParam("organizationId", organizationId)
-        .when()
         .delete(ORGANIZATION_ID.getEndpoint())
         .then();
   }

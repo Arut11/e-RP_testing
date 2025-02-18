@@ -94,4 +94,23 @@ public class CreatePrescriptionTests {
         "В ответе вернулось не 'Canceled'");
   }
 
+  @Test
+  @AllureId("21016")
+  @Tag("eRP-Api-V2")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("A. Sargatyan")
+  @DisplayName("Получение данных рецепта")
+  public void getRecipeData() {
+    prescription = prescriptionData.getCreatePrescriptionTestData();
+    createResponse = prescriptionClient.createPrescription(prescription);
+    guidPrescription = prescription.getUid();
+    createResponse = prescriptionClient.getPrescriptionByUid(guidPrescription);
+    createStatusCode = createResponse.extract().statusCode();
+    Prescription prescriptionResponse = createResponse.extract().as(Prescription.class);
+    Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
+        "Статус код вернулся не 200");
+    Assertions.assertEquals(prescription, prescriptionResponse,
+        "Тело ответа вернулось некорректное, либо одно из полей сохранилось неверно");
+  }
+
 }

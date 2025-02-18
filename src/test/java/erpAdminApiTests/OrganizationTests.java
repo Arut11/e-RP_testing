@@ -1,5 +1,6 @@
 package erpAdminApiTests;
 
+import java.sql.SQLException;
 import models.Organization;
 import erpApiAdmin.controllers.OrganizationController;
 import erpApiAdmin.testData.OrganizationData;
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 public class OrganizationTests {
 
-  private OrganizationController organizationClient;
+  private OrganizationController organizationController;
   private OrganizationData organizationTestDate;
   private Organization organization;
   private int createStatusCode;
@@ -27,18 +28,18 @@ public class OrganizationTests {
 
 
   @BeforeEach
-  public void setUp() {
-    organizationClient = new OrganizationController();
+  public void setUp() throws SQLException {
+    organizationController = new OrganizationController();
     organizationTestDate = new OrganizationData();
     organization = organizationTestDate.getCreateOrganizationTestData();
-    createResponse = organizationClient.createOrganization(organization);
+    createResponse = organizationController.createOrganization(organization);
   }
 
   @AfterEach
   public void cleanUp() {
     if (createStatusCode == HttpStatus.SC_OK && deleteTest) {
       int organizationId = createResponse.extract().path("id");
-      ValidatableResponse deleteResponse = organizationClient.deleteOrganization(organizationId);
+      ValidatableResponse deleteResponse = organizationController.deleteOrganization(organizationId);
       int deleteStatusCode = deleteResponse.extract().statusCode();
       Assertions.assertEquals(HttpStatus.SC_OK, deleteStatusCode,
           "Статус код вернулся не 200 при удалении организации");
@@ -54,6 +55,10 @@ public class OrganizationTests {
   public void createOrganizationTest() {
     createStatusCode = createResponse.extract().statusCode();
     Organization responseOrganization = createResponse.extract().as(Organization.class);
+
+    String responseBody = createResponse.extract().asString();
+    System.out.println("Тело ответа: " + responseBody);
+
     int id = createResponse.extract().path("id");
     organization.setId(id);
     Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
@@ -68,12 +73,14 @@ public class OrganizationTests {
   @Severity(SeverityLevel.CRITICAL)
   @Owner("A. Sargatyan")
   @DisplayName("Проверка редактирования созданной организации")
-  public void putOrganizationTest() {
+  public void putOrganizationTest() throws SQLException {
     int id = createResponse.extract().path("id");
     organization = organizationTestDate.getCreateOrganizationTestData();
     organization.setId(id);
-    createResponse = organizationClient.putOrganization(organization, id);
+    createResponse = organizationController.putOrganization(organization, id);
     Organization putResponse = createResponse.extract().as(Organization.class);
+    String responseBody = createResponse.extract().asString();
+    System.out.println("Тело ответа: " + responseBody);
     createStatusCode = createResponse.extract().statusCode();
     Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
         "Статус код вернулся не 200 при создании организации");
@@ -89,7 +96,7 @@ public class OrganizationTests {
   @DisplayName("Проверка удаления созданной организации")
   public void deleteOrganizationTest() {
     int organizationId = createResponse.extract().path("id");
-    ValidatableResponse deleteResponse = organizationClient.deleteOrganization(organizationId);
+    ValidatableResponse deleteResponse = organizationController.deleteOrganization(organizationId);
     int deleteStatusCode = deleteResponse.extract().statusCode();
     Assertions.assertEquals(HttpStatus.SC_OK, deleteStatusCode,
         "Статус код вернулся не 200 при удалении организации");
@@ -105,7 +112,7 @@ public class OrganizationTests {
   public void getOrganizationTest() {
     int organizationId = createResponse.extract().path("id");
     organization.setId(organizationId);
-    ValidatableResponse getResponse = organizationClient.getOrganization(organizationId);
+    ValidatableResponse getResponse = organizationController.getOrganization(organizationId);
     Organization Response = getResponse.extract().as(Organization.class);
     int getStatusCode = getResponse.extract().statusCode();
     Assertions.assertEquals(HttpStatus.SC_OK, getStatusCode,

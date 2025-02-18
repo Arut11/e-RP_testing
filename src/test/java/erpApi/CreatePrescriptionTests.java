@@ -113,4 +113,22 @@ public class CreatePrescriptionTests {
         "Тело ответа вернулось некорректное, либо одно из полей сохранилось неверно");
   }
 
+  @Test
+  @AllureId("21028")
+  @Tag("eRP-Api-V2")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("A. Sargatyan, A. Cherednikov")
+  @DisplayName("Получение количества рецептов по фильтру")
+  public void getRecipeCount() {
+    prescription = prescriptionData.getCreatePrescriptionTestData();
+    createResponse = prescriptionClient.createPrescription(prescription);
+    guidPrescription = prescription.getUid();
+    createResponse = prescriptionClient.getRecipeCountByFilter(guidPrescription);
+    createStatusCode = createResponse.extract().statusCode();
+    String count = createResponse.extract().asString();
+    Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
+        "Статус код вернулся не 200");
+    Assertions.assertEquals("1", count,
+        "Тело ответа вернулось некорректное, либо одно из полей сохранилось неверно");
+  }
 }

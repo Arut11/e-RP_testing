@@ -54,7 +54,6 @@ public class PrescriptionController extends Specifications {
 
   }
 
-
   @Step("Получить данные рецепта/назначения")
   public ValidatableResponse getPrescriptionByUid(String uid) {
     return given()
@@ -64,4 +63,13 @@ public class PrescriptionController extends Specifications {
         .then();
   }
 
+  @Step("Получение количества рецептов по фильтру")
+  public ValidatableResponse getRecipeCountByFilter(String filter) {
+    return given()
+        .spec(getBaseSpec())
+        .when()
+        .queryParam("Uid", filter)
+        .get(PRESCRIPTION_LIST_COUNT_GET.getEndpoint())
+        .then();
+  }
 }

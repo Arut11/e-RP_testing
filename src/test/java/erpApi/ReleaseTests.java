@@ -1,8 +1,10 @@
 package erpApi;
 
 
+import static erpApi.enums.responsevalues.PrescriptionResponseValue.DISPENSED_EXCEPTED;
 import static erpApi.enums.responsevalues.PrescriptionResponseValue.REGISTERED_EXPECTED;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import dataBase.DataBaseConnect;
 import erpApi.controllers.PrescriptionController;
 import erpApi.controllers.ReleaseController;
@@ -45,6 +47,7 @@ import org.junit.jupiter.api.Test;
  ValidatableResponse cancelResponse;
  private int createStatusCode;
  private String guidPrescription;
+ private String tempResponce;
 
   @BeforeEach
   public  void setUp() {
@@ -61,24 +64,22 @@ import org.junit.jupiter.api.Test;
   }
 
   @Test
-  @AllureId("20")
+  @AllureId("22228")
   @Tag("eRP-Api-V2")
   @Severity(SeverityLevel.CRITICAL)
   @Owner("A. Cherednikov")
   @DisplayName("Создание отпуска рецепта")
-  public  void createRelease() {
+  public  void createRelease() throws JsonProcessingException {
     prescription = prescriptionData.getCreatePrescriptionTestData();
     createPrescription = prescriptionClient.createPrescription(prescription);
     guidPrescription = prescription.getUid();
     relese = releaseData.getCreateReleaseTestData(prescription.getUid());
     createRelease = releaseClient.createRelease(relese);
-    createStatusCode = createPrescription.extract().statusCode();
-    String actualBody = createPrescription.extract().asString();
+    createStatusCode = createRelease.extract().statusCode();
+    String actualBody = createRelease.extract().asString();
     Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
         "Статус код вернулся не 200");
-    Assertions.assertEquals(REGISTERED_EXPECTED.toString(), actualBody,
-        "В ответе вернулось не 'Registered'");
+    Assertions.assertEquals(DISPENSED_EXCEPTED.toString(), actualBody,
+        "В ответе вернулось не 'Dispensed'");
   }
-
-
 }

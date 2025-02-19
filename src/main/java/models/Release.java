@@ -37,7 +37,7 @@ public class Release {
 
   //* Подразделение
   // Модель Subdivision
-  private String subdivision;
+  private Subdivision subdivision;
 
   //* Фармацевт
   // Модель ReleasePharmacist

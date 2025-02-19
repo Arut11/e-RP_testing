@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum PrescriptionResponseValue {
 
   REGISTERED_EXPECTED("\"Registered\"") ,
-  CANCEL_EXPECTED("\"Canceled\"");
+  CANCEL_EXPECTED("\"Canceled\""),
+  DISPENSED_EXCEPTED("\"Dispensed\"");
 
   private final String value;
 

@@ -16,7 +16,7 @@ public class ReleaseData {
         .setPrescriptionUid(uid)
         .setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
         .setOrganization(new OrganizationData().getOrganization())
-        .setSubdivision("1.2.643.5.1.13.13.12.2.31.2847.0.112753")
+        .setSubdivision(new SubdivisionData().getSubdivision())
         .setPharmacist(new PharmacistData().getPharmacist())
         .setMedicationDispense(new MedicationDispenseData().getMedicationDispense())
         .setSigna("Принимать 1 шт перорально 1 раз в день в течение 1 дня")

@@ -1,43 +1,51 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 // Отпуск рецепта/назначения.
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Release {
 
   //* Уникальный идентификатор документа в системе отправителе в формате UUID
-  private UUID localUid;
+  private String localUid;
 
   //* Уникальный идентификатор рецепта/назначения в системе отправителе сведений в формате UUID
-  private UUID prescriptionUid;
+  private String prescriptionUid;
 
   //* Дата отпуска/отмены документа
   // Формат: yyyy-MM-dd
-  private LocalDateTime date;
+  private String date;
 
   //* Организация
   // Модель Organization
-  private List<Organization> organization;
+  private Organization organization;
 
   //* Подразделение
   // Модель Subdivision
-  private List<Subdivision> subdivision;
+  private String subdivision;
 
   //* Фармацевт
   // Модель ReleasePharmacist
-  private List<ReleasePharmacist> pharmacist;
+  private ReleasePharmacist pharmacist;
 
   // Отпущенный препарат
   // Модель MedicationDispense
-  private List<MedicationDispense> medicationDispense;
+  private MedicationDispense medicationDispense;
 
   // Схема приёма
   private String signa;
@@ -53,10 +61,10 @@ public class Release {
   private String software;
 
   // Идентификатор заказа на доставку
-  private UUID deliveryUid;
+  private String deliveryUid;
 
   // Идентификатор заказа на отсроченное обслуживание/бронирование
-  private UUID orderUid;
+  private String orderUid;
 
   // СЭМДы отпуска
   // Модель Semd
@@ -64,6 +72,6 @@ public class Release {
 
   // Уникальный идентификатор СЭМДа выписки
   // Обязателен для рецептов
-  private UUID prescriptionSemdLocalUid;
+  private String prescriptionSemdLocalUid;
 
 }

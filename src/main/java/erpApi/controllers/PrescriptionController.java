@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import java.util.Base64;
-import models.Cancel;
+import models.PrescriptionCancel;
 import models.Prescription;
 import models.PrescriptionV2;
 import utils.Specifications;
@@ -37,7 +37,7 @@ public class PrescriptionController extends Specifications {
   }
 
   @Step("Отмена рецепта/назначения")
-  public ValidatableResponse cancelPrescription(Cancel cancel) {
+  public ValidatableResponse cancelPrescription(PrescriptionCancel cancel) {
     String jsonCancel = gson.toJson(cancel);
     String encodedData = Base64.getEncoder().encodeToString(jsonCancel.getBytes());
     String doctorSignature = CryptoController.getDoctorSignature(encodedData);

@@ -1,15 +1,16 @@
 package erpApi.controllers;
 
 import static erpApi.endpoints.Release.RELEASE_POST;
+import static erpApi.endpoints.Release.RELEASE_PUT;
 import static io.restassured.RestAssured.given;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import java.util.Base64;
 import models.Release;
+import models.ReleaseCancelDto;
 import models.ReleaseV2;
 import utils.Specifications;
 
@@ -32,9 +33,25 @@ public class ReleaseController extends Specifications {
     return given()
         .spec(getBaseSpec())
         .body(requestBody)
-        .log().all()
         .when()
         .post(RELEASE_POST.getEndpoint())
+        .then();
+  }
+
+  @Step("Отмена ошибочного отпуска")
+  public ValidatableResponse cancelRelease(ReleaseCancelDto releaseCancel) throws JsonProcessingException {
+    String jsonRelease = objectMapper.writeValueAsString(releaseCancel);
+    String encodedData = Base64.getEncoder().encodeToString(jsonRelease.getBytes());
+    String pharmacistSignature = CryptoController.getDoctorSignature(encodedData);
+    ReleaseV2 releaseV2 = new ReleaseV2()
+        .setData(encodedData)
+        .setPharmacistSignature(pharmacistSignature);
+    String requestBody = objectMapper.writeValueAsString(releaseV2);
+    return given()
+        .spec(getBaseSpec())
+        .body(requestBody)
+        .when()
+        .put(RELEASE_PUT.getEndpoint())
         .then();
   }
 }

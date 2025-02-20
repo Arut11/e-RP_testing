@@ -5,7 +5,7 @@ import com.github.javafaker.Faker;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import models.Cancel;
+import models.PrescriptionCancel;
 import models.Prescription;
 
 public class PrescriptionData {
@@ -22,7 +22,7 @@ public class PrescriptionData {
         .setDateEnd(
             LocalDateTime.now().plusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
         .setChronic(false)
-        .setFormType("3")
+        .setFormType("Frm1481U04")
         .setPaper(false)
         .setPatient(new PatientData().getPatient())
         .setOrganization(new OrganizationData().getOrganization())
@@ -50,8 +50,8 @@ public class PrescriptionData {
         .setPrivilegeCode("1.00000.0001");
   }
 
-  public Cancel getCancelPrescriptionTestData(String uid) {
-    return new Cancel()
+  public PrescriptionCancel getCancelPrescriptionTestData(String uid) {
+    return new PrescriptionCancel()
         .setUid(uid)
         .setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
         .setAuthor(new AuthorData().getAuthor())

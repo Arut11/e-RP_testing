@@ -13,7 +13,7 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.ValidatableResponse;
-import models.Cancel;
+import models.PrescriptionCancel;
 import models.Prescription;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
@@ -34,7 +34,7 @@ public class CreatePrescriptionTests {
   private PrescriptionController prescriptionClient;
   private Prescription prescription;
   private PrescriptionData prescriptionData;
-  private Cancel cancel;
+  private PrescriptionCancel cancelReciepe;
   ValidatableResponse createResponse;
   ValidatableResponse cancelResponse;
   private int createStatusCode;
@@ -45,7 +45,7 @@ public class CreatePrescriptionTests {
     dataBaseConnect = new DataBaseConnect();
     prescriptionClient = new PrescriptionController();
     prescription = new Prescription();
-    cancel = new Cancel();
+    cancelReciepe = new PrescriptionCancel();
     prescriptionData = new PrescriptionData();
   }
 
@@ -84,8 +84,8 @@ public class CreatePrescriptionTests {
   public void cancelPrescriptionTest() {
     prescription = prescriptionData.getCreatePrescriptionTestData();
     createResponse = prescriptionClient.createPrescription(prescription);
-    cancel = prescriptionData.getCancelPrescriptionTestData(prescription.getUid());
-    cancelResponse = prescriptionClient.cancelPrescription(cancel);
+    cancelReciepe = prescriptionData.getCancelPrescriptionTestData(prescription.getUid());
+    cancelResponse = prescriptionClient.cancelPrescription(cancelReciepe);
     createStatusCode = cancelResponse.extract().statusCode();
     String actualBody = cancelResponse.extract().asString();
     Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,

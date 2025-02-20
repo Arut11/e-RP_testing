@@ -16,7 +16,7 @@ public class PatientData {
         .setPatronymic("")
         .setBirthday("1995-07-06")
         .setPolicyNumber("1234567890000000")
-        .setGender(1)
+        .setGender("Female")
         .setSnils("15943551289")
         .setMPhone("9511454108")
         .setPrivilegeCode(null);

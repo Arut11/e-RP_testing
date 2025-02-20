@@ -8,27 +8,25 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 
-// Данные об отмене рецепта.
+// Модель данных об отмене ошибочного отпуска.
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Cancel {
+public class ReleaseCancelDto {
 
-  //* Дата отмены рецепта
-  // Используем LocalDate для даты в формате yyyy-MM-dd
-  private String uid;
-
-  //* Дата отмены рецепта
-  private String date;
+  //* Причина отмены
+  private String reason;
 
   //* Данные об авторе
   // Модель Author
-  private Author author;
+  private ReleasePharmacist author;
 
-  // Причина отмены рецепта
-  private String reasonString; // Строка для причины отмены
+  //* Дата отмены
+  private String date;
 
+  // Уникальный идентификатор отпуска в формате UUID
+  private String localUid;
 }

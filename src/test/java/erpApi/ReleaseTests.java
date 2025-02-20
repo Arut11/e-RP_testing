@@ -2,7 +2,6 @@ package erpApi;
 
 
 import static erpApi.enums.responsevalues.PrescriptionResponseValue.DISPENSED_EXCEPTED;
-import static erpApi.enums.responsevalues.PrescriptionResponseValue.REGISTERED_EXPECTED;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dataBase.DataBaseConnect;
@@ -17,9 +16,9 @@ import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import io.restassured.response.ValidatableResponse;
-import models.Cancel;
 import models.Prescription;
 import models.Release;
+import models.ReleaseCancelDto;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -42,12 +41,12 @@ import org.junit.jupiter.api.Test;
   private ReleaseData releaseData = new ReleaseData();
   private ReleaseController releaseClient = new ReleaseController();
   private PrescriptionData prescriptionData = new PrescriptionData();
+  private ReleaseCancelDto releaseCancel = new ReleaseCancelDto();
  ValidatableResponse createPrescription;
  ValidatableResponse createRelease;
  ValidatableResponse cancelResponse;
  private int createStatusCode;
  private String guidPrescription;
- private String tempResponce;
 
   @BeforeEach
   public  void setUp() {
@@ -82,4 +81,27 @@ import org.junit.jupiter.api.Test;
     Assertions.assertEquals(DISPENSED_EXCEPTED.toString(), actualBody,
         "В ответе вернулось не 'Dispensed'");
   }
+
+  @Test
+  @AllureId("22233")
+  @Tag("eRP-Api-V2")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("A. Cherednikov")
+  @DisplayName("Отмена ошибочного отпуска")
+  public  void cancelRelease() throws JsonProcessingException {
+    prescription = prescriptionData.getCreatePrescriptionTestData();
+    createPrescription = prescriptionClient.createPrescription(prescription);
+    guidPrescription = prescription.getUid();
+    relese = releaseData.getCreateReleaseTestData(prescription.getUid());
+    createRelease = releaseClient.createRelease(relese);
+    releaseCancel = releaseData.getCancelReleaseTestData(relese.getLocalUid());
+    cancelResponse = releaseClient.cancelRelease(releaseCancel);
+    createStatusCode = cancelResponse.extract().statusCode();
+    String actualBody = cancelResponse.extract().asString();
+    Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
+        "Статус код вернулся не 200");
+    Assertions.assertEquals(relese.getLocalUid(), actualBody,
+        "В ответе вернулось не localUID");
+  }
+
 }

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import models.Release;
+import models.ReleaseAnnulmentRequest;
 import models.ReleaseCancelDto;
 
 public class ReleaseData {
@@ -30,5 +31,17 @@ public class ReleaseData {
         .setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
         .setAuthor(new PharmacistData().getPharmacist())
         .setReason("autoooo");
+  }
+
+  public ReleaseAnnulmentRequest getAnnulmentReleaseTestData(String uid) {
+    return new ReleaseAnnulmentRequest()
+        .setLocalUid(fakerRu.internet().uuid())
+        .setPrescriptionUid(uid)
+        .setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+        .setOrganization(new OrganizationData().getOrganization())
+        .setSubdivision(new SubdivisionData().getSubdivision())
+        .setPharmacist(new PharmacistData().getPharmacist())
+        .setCancel(new ReleaseCancelData().getReleaseCancelData())
+        .setSoftware("autotestik");
   }
 }

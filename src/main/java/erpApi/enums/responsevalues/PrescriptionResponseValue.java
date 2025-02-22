@@ -9,7 +9,9 @@ public enum PrescriptionResponseValue {
 
   REGISTERED_EXPECTED("\"Registered\"") ,
   CANCEL_EXPECTED("\"Canceled\""),
-  DISPENSED_EXCEPTED("\"Dispensed\"");
+  DISPENSED_EXCEPTED("\"Dispensed\""),
+  ANNULMENT_EXCEPTED("\"Annulmented\"");
+
 
   private final String value;
 

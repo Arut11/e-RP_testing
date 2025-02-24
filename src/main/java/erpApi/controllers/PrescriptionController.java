@@ -3,6 +3,7 @@ package erpApi.controllers;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_CANCEL_PUT;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_LIST_COUNT_GET;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_POST;
+import static erpApi.endpoints.Prescription.PRESCRIPTION_SEMD_POST;
 import static erpApi.endpoints.Prescription.PRESCRIPTION_UID_GET;
 import static io.restassured.RestAssured.given;
 
@@ -13,6 +14,7 @@ import java.util.Base64;
 import models.PrescriptionCancel;
 import models.Prescription;
 import models.PrescriptionV2;
+import models.SemdRequest;
 import utils.Specifications;
 
 public class PrescriptionController extends Specifications {
@@ -71,5 +73,18 @@ public class PrescriptionController extends Specifications {
         .queryParam("Uid", filter)
         .get(PRESCRIPTION_LIST_COUNT_GET.getEndpoint())
         .then();
+  }
+
+  @Step("Регистрация СЭМД для рецепта")
+  public ValidatableResponse createSemdPrescription(SemdRequest semd, String guidPrescription) {
+    String jsonPrescription = gson.toJson(semd);
+    return given()
+        .spec(getBaseSpec())
+        .body(jsonPrescription)
+        .log().all()
+        .when()
+        .post(PRESCRIPTION_SEMD_POST.getEndpoint(), guidPrescription)
+        .then()
+        .log().all();
   }
 }

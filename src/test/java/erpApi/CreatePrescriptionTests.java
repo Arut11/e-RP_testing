@@ -6,6 +6,7 @@ import static erpApi.enums.responsevalues.PrescriptionResponseValue.REGISTERED_E
 import dataBase.DataBaseConnect;
 import erpApi.controllers.PrescriptionController;
 import erpApi.testData.PrescriptionData;
+import erpApi.testData.SemdData;
 import io.qameta.allure.AllureId;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Owner;
@@ -15,6 +16,7 @@ import io.qameta.allure.Story;
 import io.restassured.response.ValidatableResponse;
 import models.PrescriptionCancel;
 import models.Prescription;
+import models.SemdRequest;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -33,12 +35,15 @@ public class CreatePrescriptionTests {
   private DataBaseConnect dataBaseConnect;
   private PrescriptionController prescriptionClient;
   private Prescription prescription;
+  private SemdRequest semd;
+  private SemdData semdData;
   private PrescriptionData prescriptionData;
   private PrescriptionCancel cancelReciepe;
   ValidatableResponse createResponse;
   ValidatableResponse cancelResponse;
   private int createStatusCode;
   private String guidPrescription;
+  private String guidSemd;
 
   @BeforeEach
   public void setUp() {
@@ -47,14 +52,17 @@ public class CreatePrescriptionTests {
     prescription = new Prescription();
     cancelReciepe = new PrescriptionCancel();
     prescriptionData = new PrescriptionData();
+    semdData = new SemdData();
   }
 
   @AfterEach
   public void cleanUp() {
     guidPrescription = prescription.getUid();
-    if (createStatusCode == HttpStatus.SC_OK) {
-      String query = "DELETE FROM erp_prescription WHERE guid = '" + guidPrescription + "'";
-      dataBaseConnect.executeUpdate(query);
+      if (semd==null)  {
+        if (createStatusCode == HttpStatus.SC_OK) {
+          String query = "DELETE FROM erp_prescription WHERE guid = '" + guidPrescription + "'";
+          dataBaseConnect.executeUpdate(query);
+      }
     }
   }
 
@@ -131,4 +139,25 @@ public class CreatePrescriptionTests {
     Assertions.assertEquals("1", count,
         "Тело ответа вернулось некорректное, либо одно из полей сохранилось неверно");
   }
+
+  @Test
+  @AllureId("21031")
+  @Tag("eRP-Api-V2")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("A. Cherednikov")
+  @DisplayName("Регистрация СЭМД для рецепта")
+  public void createSemdPrescriptionTest() {
+    prescription = prescriptionData.getCreatePrescriptionTestData();
+    createResponse = prescriptionClient.createPrescription(prescription);
+    guidPrescription = prescription.getUid();
+    semd = semdData.getCreateSemdPrescriptionTestData();
+    createResponse = prescriptionClient.createSemdPrescription(semd, guidPrescription);
+    createStatusCode = createResponse.extract().statusCode();
+    String actualBody = createResponse.extract().asString().replace("\"", "");
+    Assertions.assertEquals(HttpStatus.SC_OK, createStatusCode,
+        "Статус код вернулся не 200");
+    Assertions.assertEquals(guidSemd = semd.getLocalUid(), actualBody,
+        "В ответе вернулось не 'Uid СЭМДа'");
+  }
+
 }
